@@ -1,48 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { MessageSquare, Users, Video, Settings, Globe, Heart, MessageCircle, Share, Plus } from 'lucide-react';
 
-// Mock data for development
-const mockServers = [
-  { id: '1', name: 'Gaming Hub', icon: '🎮' },
-  { id: '2', name: 'Dev Community', icon: '💻' },
-  { id: '3', name: 'Music Lovers', icon: '🎵' }
-];
-
-const mockChannels = [
-  { id: '1', name: 'general', type: 'text' },
-  { id: '2', name: 'gaming', type: 'text' },
-  { id: '3', name: 'voice-chat', type: 'voice' }
-];
-
-const mockMessages = [
-  { id: '1', content: 'Hello everyone!', author: 'user1', timestamp: new Date() },
-  { id: '2', content: 'Hey there!', author: 'user2', timestamp: new Date() }
-];
-
-const mockReels = [
-  {
-    id: '1',
-    video_url: 'https://example.com/video1.mp4',
-    caption: 'Amazing gaming moment!',
-    author: { username: 'gamer123', avatar: null },
-    likes_count: 150,
-    comments_count: 25,
-    duration: 30
-  },
-  {
-    id: '2',
-    video_url: 'https://example.com/video2.mp4',
-    caption: 'Check out this code!',
-    author: { username: 'devmaster', avatar: null },
-    likes_count: 89,
-    comments_count: 12,
-    duration: 45
-  }
-];
-
-// Translation strings
+// الترجمات
 const translations = {
   en: {
+    appName: 'Disgram',
     servers: 'Servers',
     channels: 'Channels',
     messages: 'Messages',
@@ -55,9 +17,10 @@ const translations = {
     comment: 'Comment',
     share: 'Share',
     addReel: 'Add Reel',
-    welcome: 'Welcome to Discord Reels!'
+    welcome: 'Welcome to Disgram!'
   },
   ar: {
+    appName: 'ديسجرام',
     servers: 'الخوادم',
     channels: 'القنوات',
     messages: 'الرسائل',
@@ -70,9 +33,10 @@ const translations = {
     comment: 'تعليق',
     share: 'مشاركة',
     addReel: 'إضافة ريل',
-    welcome: 'مرحبًا بك في ديسكورد ريلز!'
+    welcome: 'مرحبًا بك في ديسجرام!'
   },
   fr: {
+    appName: 'Disgram',
     servers: 'Serveurs',
     channels: 'Canaux',
     messages: 'Messages',
@@ -85,9 +49,10 @@ const translations = {
     comment: 'Commentaire',
     share: 'Partager',
     addReel: 'Ajouter un reel',
-    welcome: 'Bienvenue sur Discord Reels!'
+    welcome: 'Bienvenue sur Disgram!'
   },
   ru: {
+    appName: 'Дисграм',
     servers: 'Серверы',
     channels: 'Каналы',
     messages: 'Сообщения',
@@ -100,10 +65,11 @@ const translations = {
     comment: 'Комментарий',
     share: 'Поделиться',
     addReel: 'Добавить рил',
-    welcome: 'Добро пожаловать в Discord Reels!'
+    welcome: 'Добро пожаловать в Дисграм!'
   }
 };
 
+// مبدل اللغة
 const LanguageSwitcher = ({ currentLanguage, onLanguageChange }) => {
   const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -130,6 +96,7 @@ const LanguageSwitcher = ({ currentLanguage, onLanguageChange }) => {
   );
 };
 
+// الشريط الجانبي للسيرفرات
 const ServerSidebar = ({ servers, currentServer, onServerSelect, t }) => {
   return (
     <div className="w-16 bg-gray-900 flex flex-col items-center py-3 space-y-4">
@@ -153,6 +120,7 @@ const ServerSidebar = ({ servers, currentServer, onServerSelect, t }) => {
   );
 };
 
+// شريط القنوات
 const ChannelsSidebar = ({ channels, currentChannel, onChannelSelect, t }) => {
   return (
     <div className="w-60 bg-gray-800 flex flex-col">
@@ -181,6 +149,7 @@ const ChannelsSidebar = ({ channels, currentChannel, onChannelSelect, t }) => {
   );
 };
 
+// منطقة الدردشة
 const ChatArea = ({ messages, currentChannel, onSendMessage, t, currentLanguage }) => {
   const [newMessage, setNewMessage] = useState('');
 
@@ -236,10 +205,9 @@ const ChatArea = ({ messages, currentChannel, onSendMessage, t, currentLanguage 
   );
 };
 
+// عنصر الريل
 const ReelItem = ({ reel, onLike, onComment, t }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [showComments, setShowComments] = useState(false);
-  const videoRef = useRef(null);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -249,12 +217,15 @@ const ReelItem = ({ reel, onLike, onComment, t }) => {
   return (
     <div className="h-screen flex items-center justify-center bg-black">
       <div className="relative w-80 h-[90vh] rounded-2xl overflow-hidden bg-gray-900">
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover"
-          controls
-          src={reel.video_url}
-        />
+        <div className="w-full h-full bg-gradient-to-br from-purple-900 to-blue-800 flex items-center justify-center">
+          <div className="text-white text-center">
+            <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Video className="w-10 h-10" />
+            </div>
+            <p className="text-lg font-semibold">Reel Video</p>
+            <p className="text-sm mt-2 opacity-80">{reel.caption}</p>
+          </div>
+        </div>
         
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
           <div className="text-white">
@@ -272,10 +243,7 @@ const ReelItem = ({ reel, onLike, onComment, t }) => {
             <span className="text-sm">{reel.likes_count + (isLiked ? 1 : 0)}</span>
           </button>
           
-          <button
-            onClick={() => setShowComments(!showComments)}
-            className="flex flex-col items-center text-white"
-          >
+          <button className="flex flex-col items-center text-white">
             <MessageCircle className="w-8 h-8" />
             <span className="text-sm">{reel.comments_count}</span>
           </button>
@@ -289,35 +257,21 @@ const ReelItem = ({ reel, onLike, onComment, t }) => {
   );
 };
 
+// صفحة الريلز
 const ReelsFeed = ({ reels, onLike, onComment, t }) => {
   const [currentReelIndex, setCurrentReelIndex] = useState(0);
 
-  const handleScroll = (e) => {
-    if (e.deltaY > 0) {
-      setCurrentReelIndex(prev => Math.min(prev + 1, reels.length - 1));
-    } else {
-      setCurrentReelIndex(prev => Math.max(prev - 1, 0));
-    }
-  };
-
   return (
-    <div 
-      className="h-screen overflow-hidden bg-black relative"
-      onWheel={handleScroll}
-    >
-      <div 
-        className="flex flex-col transition-transform duration-300"
-        style={{ transform: `translateY(-${currentReelIndex * 100}vh)` }}
-      >
-        {reels.map(reel => (
+    <div className="h-screen overflow-hidden bg-black relative">
+      <div className="h-full transition-transform duration-300">
+        {reels.length > 0 && (
           <ReelItem
-            key={reel.id}
-            reel={reel}
+            reel={reels[currentReelIndex]}
             onLike={onLike}
             onComment={onComment}
             t={t}
           />
-        ))}
+        )}
       </div>
       
       <div className="absolute top-4 right-4 flex space-x-2 rtl:space-x-reverse">
@@ -326,15 +280,69 @@ const ReelsFeed = ({ reels, onLike, onComment, t }) => {
           <span>{t('addReel')}</span>
         </button>
       </div>
+
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {reels.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentReelIndex(index)}
+            className={`w-2 h-2 rounded-full ${
+              index === currentReelIndex ? 'bg-white' : 'bg-gray-500'
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
 
+// المكون الرئيسي
 const App = () => {
-  const [currentView, setCurrentView] = useState('chat'); // 'chat' or 'reels'
+  const [currentView, setCurrentView] = useState('chat');
   const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [currentServer, setCurrentServer] = useState(mockServers[0]);
-  const [currentChannel, setCurrentChannel] = useState(mockChannels[0]);
+  const [currentServer, setCurrentServer] = useState(null);
+  const [currentChannel, setCurrentChannel] = useState(null);
+  
+  // بيانات تجريبية
+  const mockServers = [
+    { id: '1', name: 'Gaming Hub', icon: '🎮' },
+    { id: '2', name: 'Dev Community', icon: '💻' },
+    { id: '3', name: 'Music Lovers', icon: '🎵' }
+  ];
+
+  const mockChannels = [
+    { id: '1', name: 'general', type: 'text' },
+    { id: '2', name: 'gaming', type: 'text' },
+    { id: '3', name: 'voice-chat', type: 'voice' }
+  ];
+
+  const mockMessages = [
+    { id: '1', content: 'Hello everyone! 👋', author: 'user1', timestamp: new Date() },
+    { id: '2', content: 'Welcome to Disgram! 🎉', author: 'user2', timestamp: new Date() },
+    { id: '3', content: 'This is amazing! 😍', author: 'user3', timestamp: new Date() }
+  ];
+
+  const mockReels = [
+    {
+      id: '1',
+      video_url: '',
+      caption: 'Amazing gaming moment! 🎮',
+      author: { username: 'gamer123', avatar: null },
+      likes_count: 150,
+      comments_count: 25,
+      duration: 30
+    },
+    {
+      id: '2',
+      video_url: '',
+      caption: 'Check out this code! 💻',
+      author: { username: 'devmaster', avatar: null },
+      likes_count: 89,
+      comments_count: 12,
+      duration: 45
+    }
+  ];
+
   const [messages, setMessages] = useState(mockMessages);
   const [reels, setReels] = useState(mockReels);
 
@@ -344,7 +352,7 @@ const App = () => {
     const newMessage = {
       id: Date.now().toString(),
       content,
-      author: 'currentUser',
+      author: 'You',
       timestamp: new Date()
     };
     setMessages(prev => [...prev, newMessage]);
@@ -361,17 +369,19 @@ const App = () => {
     ));
   };
 
-  const handleAddComment = (reelId, content) => {
-    setReels(prev => prev.map(reel => 
-      reel.id === reelId 
-        ? { ...reel, comments_count: reel.comments_count + 1 }
-        : reel
-    ));
-  };
+  // تعيين السيرفر والقناة الافتراضية
+  React.useEffect(() => {
+    if (mockServers.length > 0 && !currentServer) {
+      setCurrentServer(mockServers[0]);
+    }
+    if (mockChannels.length > 0 && !currentChannel) {
+      setCurrentChannel(mockChannels[0]);
+    }
+  }, []);
 
   return (
     <div className="h-screen flex bg-gray-900" dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}>
-      {/* Server Sidebar */}
+      {/* الشريط الجانبي للسيرفرات */}
       <ServerSidebar
         servers={mockServers}
         currentServer={currentServer}
@@ -379,7 +389,7 @@ const App = () => {
         t={t}
       />
       
-      {/* Channels Sidebar */}
+      {/* شريط القنوات */}
       {currentView === 'chat' && (
         <ChannelsSidebar
           channels={mockChannels}
@@ -389,11 +399,19 @@ const App = () => {
         />
       )}
       
-      {/* Main Content Area */}
+      {/* المنطقة الرئيسية */}
       <div className="flex-1 flex flex-col">
-        {/* Top Navigation */}
+        {/* شريط التنقل العلوي */}
         <div className="h-12 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-4">
-          <div className="flex items-center space-x-4 rtl:space-x-reverse">
+          <div className="flex items-center space-x-6 rtl:space-x-reverse">
+            {/* شعار Disgram */}
+            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+              <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">DG</span>
+              </div>
+              <h1 className="text-white font-bold text-xl">{t('appName')}</h1>
+            </div>
+            
             <button
               onClick={() => setCurrentView('chat')}
               className={`px-4 py-1 rounded transition-colors ${
@@ -427,7 +445,7 @@ const App = () => {
           </div>
         </div>
         
-        {/* Content Area */}
+        {/* منطقة المحتوى */}
         <div className="flex-1">
           {currentView === 'chat' ? (
             <ChatArea
@@ -441,7 +459,7 @@ const App = () => {
             <ReelsFeed
               reels={reels}
               onLike={handleLikeReel}
-              onComment={handleAddComment}
+              onComment={() => {}}
               t={t}
             />
           )}
